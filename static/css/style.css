@@ -1,0 +1,47 @@
+body {
+    background-color: #f8f9fa;
+    padding: 20px 0;
+}
+
+.header-row {
+    display: flex;
+    gap: 10px;
+}
+
+.header-row input {
+    flex: 1;
+}
+
+#response {
+    max-height: 500px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+#status {
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+#status.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+#status.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
