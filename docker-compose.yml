@@ -8,6 +8,18 @@ services:
     environment:
       - FLASK_ENV=development
       - FLASK_DEBUG=1
+    working_dir: /app/apps
+    command: python app.py
+    restart: unless-stopped
+
+  web_fastapi:
+    build: .
+    ports:
+      - "5001:5000"
+    volumes:
+      - .:/app
+    working_dir: /app/apps
+    command: uvicorn app_fastapi:app --host 0.0.0.0 --port 5000 --reload
     restart: unless-stopped
 
   test_api:
