@@ -3,6 +3,20 @@ body {
     padding: 20px 0;
 }
 
+/* JSON预览区域样式 */
+#requestBodyPreview {
+    display: block;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
 .header-row {
     display: flex;
     gap: 10px;

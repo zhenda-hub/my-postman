@@ -1,4 +1,35 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // 格式化JSON函数
+    function formatJson() {
+        const requestBody = document.getElementById('requestBody');
+        const preview = document.getElementById('requestBodyPreview');
+        const body = requestBody.value.trim();
+        
+        if (!body) {
+            preview.parentElement.classList.add('d-none');
+            return;
+        }
+        
+        try {
+            // 解析JSON并格式化预览
+            const parsedBody = JSON.parse(body);
+            const formatted = JSON.stringify(parsedBody, null, 2);
+            
+            // 更新预览区域
+            preview.textContent = formatted;
+            hljs.highlightElement(preview);
+            
+            // 显示预览区域
+            preview.parentElement.classList.remove('d-none');
+        } catch (e) {
+            alert(`JSON格式错误: ${e.message}`);
+            preview.parentElement.classList.add('d-none');
+        }
+    }
+    
+    // 绑定格式化按钮事件
+    document.getElementById('formatJson').addEventListener('click', formatJson);
+
     const methodSelect = document.getElementById('method');
     const urlInput = document.getElementById('url');
     const sendButton = document.getElementById('send');
@@ -58,17 +89,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // 准备请求体
             let requestBody = undefined;
-            // 只在非GET/HEAD请求且有请求体时处理
             if (body && !['GET', 'HEAD'].includes(method.toUpperCase())) {
                 try {
-                    // 先解析JSON来验证格式
+                    // 解析和格式化JSON
                     const parsedBody = JSON.parse(body);
-                    // 然后再把对象转回字符串，确保是规范的JSON
                     requestBody = JSON.stringify(parsedBody);
-                    console.log('请求体:', requestBody);
+                    // 美化显示
+                    requestBodyTextarea.value = JSON.stringify(parsedBody, null, 2);
                 } catch (e) {
-                    console.error('解析JSON错误:', e);
-                    console.error('原始请求体:', body);
                     throw new Error(`JSON格式错误: ${e.message}`);
                 }
             } else if (body && ['GET', 'HEAD'].includes(method.toUpperCase())) {
@@ -99,16 +127,11 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 // 尝试解析JSON
                 const jsonData = JSON.parse(result.data);
-                formattedResponse = JSON.stringify(jsonData, null, 2);
+                responseElement.textContent = JSON.stringify(jsonData, null, 2);
+                hljs.highlightElement(responseElement);
             } catch {
                 // 如果不是JSON，直接显示
-                formattedResponse = result.data;
-            }
-
-            responseElement.textContent = formattedResponse;
-            // 检查hljs是否可用
-            if (window.hljs) {
-                hljs.highlightElement(responseElement);
+                responseElement.textContent = result.data;
             }
 
         } catch (error) {
