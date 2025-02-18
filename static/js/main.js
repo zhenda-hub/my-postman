@@ -58,7 +58,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // 准备请求体
             let requestBody = undefined;
-            if (body) {
+            // 只在非GET/HEAD请求且有请求体时处理
+            if (body && !['GET', 'HEAD'].includes(method.toUpperCase())) {
                 try {
                     // 先解析JSON来验证格式
                     const parsedBody = JSON.parse(body);
@@ -70,6 +71,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.error('原始请求体:', body);
                     throw new Error(`JSON格式错误: ${e.message}`);
                 }
+            } else if (body && ['GET', 'HEAD'].includes(method.toUpperCase())) {
+                console.warn('警告: GET/HEAD请求不应该包含请求体，已忽略请求体');
+                // 清空请求体输入框
+                // document.getElementById('requestBody').value = '';
             }
 
             // 发送代理请求
