@@ -56,8 +56,11 @@ document.addEventListener('DOMContentLoaded', function() {
             statusElement.textContent = '';
             statusElement.className = '';
 
+            // 处理URL，将localhost替换为host.docker.internal
+            const processedUrl = url.replace('localhost', 'host.docker.internal');
+            
             // 发送代理请求
-            const response = await fetch(`/proxy?url=${encodeURIComponent(url)}`, {
+            const response = await fetch(`/proxy?url=${encodeURIComponent(processedUrl)}`, {
                 method: method,
                 headers: {
                     ...headers,
@@ -69,7 +72,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const result = await response.json();
 
             // 更新响应状态
-            statusElement.textContent = `${result.status} - ${result.time.toFixed(0)}ms`;
+            const responseTime = result.time ? ` - ${result.time.toFixed(0)}ms` : '';
+            statusElement.textContent = `${result.status}${responseTime}`;
             statusElement.className = result.status >= 200 && result.status < 300 ? 'success' : 'error';
 
             // 格式化并显示响应
@@ -84,7 +88,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             responseElement.textContent = formattedResponse;
-            hljs.highlightElement(responseElement);
+            // 检查hljs是否可用
+            if (window.hljs) {
+                hljs.highlightElement(responseElement);
+            }
 
         } catch (error) {
             statusElement.textContent = '请求失败';
