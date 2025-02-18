@@ -17,8 +17,7 @@ def proxy():
         if not target_url:
             return jsonify({'error': 'URL is required'}), 400
             
-        # 将localhost替换为test_api
-        target_url = target_url.replace('localhost:8000', 'test_api:8000')
+        # URL已经由用户提供，直接使用
 
         # 构建请求参数
         method = request.method

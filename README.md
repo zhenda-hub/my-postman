@@ -86,6 +86,35 @@ my-postman/
 +----------------------------------------+
 ```
 
+## URL 使用说明
+
+### 本地开发环境
+
+当你在本地运行服务时，直接使用 localhost 加端口号：
+
+```
+http://localhost:8000/api/users
+http://localhost:8001/api/products
+```
+
+### Docker 环境
+
+当使用 Docker Compose 运行时，使用服务名加端口号：
+
+```
+http://test_api:8000/api/users
+http://other_service:8001/api/products
+```
+
+### 生产环境
+
+在生产环境中，直接使用完整的 URL：
+
+```
+https://api.example.com/users
+https://api2.example.com/products
+```
+
 ## 使用方式
 
 ### 使用 Docker Compose（推荐）
