@@ -19,5 +19,6 @@ services:
     environment:
       - FLASK_ENV=development
       - FLASK_DEBUG=1
+    working_dir: /app/apps
     command: python test_server.py
     restart: unless-stopped

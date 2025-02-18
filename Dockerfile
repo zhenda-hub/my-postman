@@ -9,4 +9,5 @@ COPY . .
 
 EXPOSE 5000
 
+WORKDIR /app/apps
 CMD ["python", "app.py"]

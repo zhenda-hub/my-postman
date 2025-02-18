@@ -2,7 +2,15 @@ from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 import requests
 
-app = Flask(__name__)
+import os
+
+# 获取当前文件的目录
+basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+
+# 创建 Flask 应用，指定模板和静态文件目录
+app = Flask(__name__,
+           template_folder=os.path.join(basedir, 'templates'),
+           static_folder=os.path.join(basedir, 'static'))
 CORS(app)
 
 @app.route('/')
