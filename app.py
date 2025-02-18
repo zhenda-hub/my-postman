@@ -19,10 +19,14 @@ def proxy():
 
         # 构建请求参数
         method = request.method
-        headers = dict(request.headers)
-        # 移除不需要转发的头部
-        headers.pop('Host', None)
-        data = request.get_data()
+        headers = {}
+        
+        # 只转发必要的请求头
+        if 'Content-Type' in request.headers:
+            headers['Content-Type'] = request.headers['Content-Type']
+        
+        # 获取请求体
+        data = request.get_data().decode('utf-8') if request.get_data() else None
 
         # 发送请求
         response = requests.request(
@@ -41,8 +45,12 @@ def proxy():
             'time': response.elapsed.total_seconds() * 1000  # 转换为毫秒
         })
 
-    except requests.exceptions.RequestException as e:
-        return jsonify({'error': str(e)}), 500
+    except Exception as e:
+        app.logger.error(f'Proxy error: {str(e)}')
+        return jsonify({
+            'error': f'Proxy error: {str(e)}',
+            'status': 500
+        }), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

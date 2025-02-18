@@ -72,6 +72,14 @@
     <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/static/vendor/highlight/js/highlight.min.js"></script>
     <script src="/static/vendor/highlight/js/json.min.js"></script>
+    <script>
+        // 初始化highlight.js
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.hljs) {
+                hljs.configure({ languages: ['json'] });
+            }
+        });
+    </script>
     <script src="/static/js/main.js"></script>
 </body>
 </html>
