@@ -56,6 +56,22 @@ document.addEventListener('DOMContentLoaded', function() {
             statusElement.textContent = '';
             statusElement.className = '';
 
+            // 准备请求体
+            let requestBody = undefined;
+            if (body) {
+                try {
+                    // 先解析JSON来验证格式
+                    const parsedBody = JSON.parse(body);
+                    // 然后再把对象转回字符串，确保是规范的JSON
+                    requestBody = JSON.stringify(parsedBody);
+                    console.log('请求体:', requestBody);
+                } catch (e) {
+                    console.error('解析JSON错误:', e);
+                    console.error('原始请求体:', body);
+                    throw new Error(`JSON格式错误: ${e.message}`);
+                }
+            }
+
             // 发送代理请求
             const response = await fetch(`/proxy?url=${encodeURIComponent(url)}`, {
                 method: method,
@@ -63,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     ...headers,
                     'Content-Type': 'application/json'
                 },
-                body: body ? body : undefined
+                body: requestBody
             });
 
             const result = await response.json();

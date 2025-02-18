@@ -27,18 +27,30 @@ def get_user(user_id):
 @app.route('/api/users', methods=['POST'])
 def create_user():
     """创建新用户"""
-    data = request.get_json()
-    if not data or not data.get('name') or not data.get('email'):
-        return jsonify({"error": "需要提供name和email"}), 400
-    
-    new_id = max(users.keys()) + 1 if users else 1
-    new_user = {
-        "id": new_id,
-        "name": data['name'],
-        "email": data['email']
-    }
-    users[new_id] = new_user
-    return jsonify(new_user), 201
+    try:
+        # 打印请求信息
+        print(f'Request Content-Type: {request.headers.get("Content-Type")}')
+        print(f'Request Data: {request.get_data().decode("utf-8")}')
+        
+        # 强制解析JSON
+        data = request.get_json(force=True)
+        print(f'Parsed JSON: {data}')
+        
+        if not data or not data.get('name') or not data.get('email'):
+            return jsonify({"error": "需要提供name和email"}), 400
+        
+        new_id = max(users.keys()) + 1 if users else 1
+        new_user = {
+            "id": new_id,
+            "name": data['name'],
+            "email": data['email']
+        }
+        users[new_id] = new_user
+        return jsonify(new_user), 201
+        
+    except Exception as e:
+        print(f'Error in create_user: {str(e)}')
+        return jsonify({"error": f"处理请求时出错: {str(e)}"}), 400
 
 @app.route('/api/users/<int:user_id>', methods=['PUT'])
 def update_user(user_id):

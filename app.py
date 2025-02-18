@@ -16,6 +16,9 @@ def proxy():
         target_url = request.args.get('url')
         if not target_url:
             return jsonify({'error': 'URL is required'}), 400
+            
+        # 将localhost替换为test_api
+        target_url = target_url.replace('localhost:8000', 'test_api:8000')
 
         # 构建请求参数
         method = request.method
@@ -26,7 +29,15 @@ def proxy():
             headers['Content-Type'] = request.headers['Content-Type']
         
         # 获取请求体
-        data = request.get_data().decode('utf-8') if request.get_data() else None
+        data = None
+        if request.get_data():
+            try:
+                # 直接获取原始数据
+                data = request.get_data()
+                print(f'Forwarding request data: {data}')
+            except Exception as e:
+                print(f'Error getting request data: {str(e)}')
+                return jsonify({'error': f'获取请求数据错误: {str(e)}'}), 400
 
         # 发送请求
         response = requests.request(
