@@ -56,11 +56,8 @@ document.addEventListener('DOMContentLoaded', function() {
             statusElement.textContent = '';
             statusElement.className = '';
 
-            // 处理URL，将localhost替换为host.docker.internal
-            const processedUrl = url.replace('localhost', 'host.docker.internal');
-            
             // 发送代理请求
-            const response = await fetch(`/proxy?url=${encodeURIComponent(processedUrl)}`, {
+            const response = await fetch(`/proxy?url=${encodeURIComponent(url)}`, {
                 method: method,
                 headers: {
                     ...headers,
