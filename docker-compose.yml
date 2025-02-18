@@ -9,3 +9,15 @@ services:
       - FLASK_ENV=development
       - FLASK_DEBUG=1
     restart: unless-stopped
+
+  test_api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    command: python test_server.py
+    restart: unless-stopped
