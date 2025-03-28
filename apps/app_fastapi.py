@@ -60,14 +60,18 @@ async def proxy(request: Request):
                 url=target_url,
                 headers=headers,
                 content=body,
-                timeout=30.0
+                timeout=30.0,
+                follow_redirects=True  # 自动跟踪重定向
             )
 
+            # 获取响应内容
+            response_text = response.text
+            
             # 返回与 Flask 版本一致的响应格式
             return JSONResponse({
                 'status': response.status_code,
                 'headers': dict(response.headers),
-                'data': response.text,
+                'data': response_text,
                 'time': response.elapsed.total_seconds() * 1000  # 转换为毫秒
             })
 

@@ -55,6 +55,15 @@ def proxy():
             timeout=30
         )
 
+        # 获取响应内容
+        content_type = response.headers.get('Content-Type', '')
+        
+        # 如果有编码信息，使用指定编码；否则默认使用 utf-8
+        if 'charset=' in content_type.lower():
+            response.encoding = content_type.lower().split('charset=')[-1].strip()
+        else:
+            response.encoding = 'utf-8'
+
         # 返回响应
         return jsonify({
             'status': response.status_code,
