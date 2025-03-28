@@ -64,11 +64,18 @@ def proxy():
         else:
             response.encoding = 'utf-8'
 
+        # 处理响应数据, 优先尝试JSON解析
+        try:
+            response_data = response.json()
+        except:
+            # 如果JSON解析失败，保持原始文本
+            response_data = response.text
+
         # 返回响应
         return jsonify({
             'status': response.status_code,
             'headers': dict(response.headers),
-            'data': response.text,
+            'data': response_data,
             'time': response.elapsed.total_seconds() * 1000  # 转换为毫秒
         })
 

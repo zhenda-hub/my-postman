@@ -106,11 +106,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // 发送代理请求
+            console.log('headers', headers)
             const response = await fetch(`/proxy?url=${encodeURIComponent(url)}`, {
                 method: method,
                 headers: {
                     ...headers,
-                    'Content-Type': 'application/json'
                 },
                 body: requestBody
             });
@@ -122,17 +122,22 @@ document.addEventListener('DOMContentLoaded', function() {
             statusElement.textContent = `${result.status}${responseTime}`;
             statusElement.className = result.status >= 200 && result.status < 300 ? 'success' : 'error';
 
-            // 格式化并显示响应
-            let formattedResponse;
-            try {
-                // 尝试解析JSON
-                const jsonData = JSON.parse(result.data);
-                responseElement.textContent = JSON.stringify(jsonData, null, 2);
-                hljs.highlightElement(responseElement);
-            } catch {
-                // 如果不是JSON，直接显示
-                responseElement.textContent = result.data;
+            // 格式化并显示响应数据
+            let displayContent;
+            if (typeof result.data === 'object') {
+                // 如果是对象，格式化为JSON字符串
+                displayContent = JSON.stringify(result.data, null, 2);
+            } else {
+                // 如果是字符串，尝试解析并格式化JSON
+                try {
+                    const jsonData = JSON.parse(result.data);
+                    displayContent = JSON.stringify(jsonData, null, 2);
+                } catch {
+                    // 如果不是JSON，直接显示原始内容
+                    displayContent = result.data;
+                }
             }
+            responseElement.value = displayContent;
 
         } catch (error) {
             statusElement.textContent = '请求失败';
